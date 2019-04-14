@@ -135,8 +135,13 @@ function* depthTraversalTree(root) {
  *           8
  *
  */
-function* breadthTraversalTree(root) {
-    throw new Error('Not implemented');
+function* breadthTraversalTree(root, a) {
+    // const stack = new Array(root).reverse();
+    // while (stack.length > 0) {
+    //     let value = stack.pop();
+    //     yield value;
+    // if (value.children) value.children.forEach(e => stack.unshift(e));
+    // }
 }
 
 
@@ -153,8 +158,53 @@ function* breadthTraversalTree(root) {
  *   [ 0 ], [ 2, 4, 6, ... ]  => [ 0, 2, 4, 6, ... ]
  *   [ 1, 3, 5, ... ], [ -1 ] => [ -1, 1, 3, 5, ...]
  */
+
+// function* g1() {
+//     yield 2;
+//     yield 3;
+//     yield 4;
+//   }
+  
+//   function* g2() {
+//     yield 1;
+//     yield* g1();
+//     yield 5;
+//   }
+  
+//   var iterator = g2();
+  
+//   console.log(iterator.next()); // { value: 1, done: false }
+//   console.log(iterator.next()); // { value: 2, done: false }
+//   console.log(iterator.next()); // { value: 3, done: false }
+//   console.log(iterator.next()); // { value: 4, done: false }
+//   console.log(iterator.next()); // { value: 5, done: false }
+//   console.log(iterator.next()); // { value: undefined, done: true }
+
+
 function* mergeSortedSequences(source1, source2) {
-    
+    source1 = source1();
+    source2 = source2();
+        
+    let v1 = source1.next(),
+        v2 = source2.next();
+        
+        while (!v1.done) {
+            if (v2.done) {
+                yield v1.value;
+                yield* source1;
+            }
+
+            yield Math.min(v1.value, v2.value);
+            yield Math.max(v1.value, v2.value); 
+            
+            v1 = source1.next();
+            v2 = source2.next();
+        }
+
+        if (!v2.done) {
+            yield v2.value;
+            yield* source2;
+        }
 }
 
 
